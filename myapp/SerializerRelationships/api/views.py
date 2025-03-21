@@ -7,11 +7,15 @@ from SerializerRelationships.serializers import BookSerializer, AuthorSerializer
 
 class BooksAuthorAPIView(APIView):
 
-    def get(self, request):
-        queryset = Author2.objects.all()
-        # serialized_data = AuthorSerializer(queryset, many=True, context={'request': request})
-        serialized_data = AuthorSerializer(queryset, many=True)
-        return Response(serialized_data.data, status=status.HTTP_200_OK)
+    def get(self, request,pk=None):
+        if(pk):
+            queryset = Author2.objects.get(id=pk)
+            serialized_data = AuthorSerializer(queryset,  context={'request': request})
+            return Response(serialized_data.data, status=status.HTTP_200_OK)
+        elif(pk==None):
+            queryset = Author2.objects.all()
+            serialized_data = AuthorSerializer(queryset, many=True, context={'request': request})
+            return Response(serialized_data.data, status=status.HTTP_200_OK)
 
     def post(self, request):
         serializer = AuthorSerializer(data = request.data)
@@ -23,10 +27,14 @@ class BooksAuthorAPIView(APIView):
     
 class BooksAPIView(APIView):
 
-    def get(self, request):
+    def get(self, request, pk=None):
+        if(pk):
+            queryset = Book2.objects.get(id=pk)
+            serialized_data = BookSerializer(queryset, context={'request': request})
+            return Response(serialized_data.data, status=status.HTTP_200_OK)
+        
         queryset = Book2.objects.all()
-        # serialized_data = AuthorSerializer(queryset, many=True, context={'request': request})
-        serialized_data = BookSerializer(queryset, many=True)
+        serialized_data = BookSerializer(queryset, many=True,context={'request': request})
         return Response(serialized_data.data, status=status.HTTP_200_OK)
 
     def post(self, request):

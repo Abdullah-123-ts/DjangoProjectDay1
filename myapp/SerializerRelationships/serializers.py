@@ -18,7 +18,8 @@ class BookSerializer(serializers.ModelSerializer):
 
 
 class AuthorSerializer(serializers.ModelSerializer):
-    books = BookSerializer(many=True, read_only=True)
+    # books = BookSerializer(many=True, read_only=True)
+    books = serializers.HyperlinkedRelatedField(many=True, read_only=True, view_name="books")
     class Meta:
         model = Author2
         fields = "__all__"
